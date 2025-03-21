@@ -10,9 +10,7 @@
   a {
     ::ng-deep {
       .mdc-list-item__primary-text {
-        display: flex;
-        justify-content: start;
-        align-items: center;
+        @apply flex justify-start items-center;
       }
     }
   }

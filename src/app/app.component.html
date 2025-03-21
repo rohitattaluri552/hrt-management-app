@@ -5,46 +5,16 @@
       <h1 class="text-2xl font-bold mb-8">HRT SAINIRMAN</h1>
 
       <mat-nav-list>
-        <a mat-list-item routerLink="/dashboard" routerLinkActive="active">
-          <mat-icon>dashboard</mat-icon>
-          <span class="ml-2">Dashboard</span>
+        @for(menu of menuItems; track menu.title){
+        <a
+          mat-list-item
+          [routerLink]="menu.routeLink"
+          routerLinkActive="active"
+        >
+          <mat-icon>{{ menu.icon }}</mat-icon>
+          <div class="ml-2">{{ menu.title }}</div>
         </a>
-        <a mat-list-item routerLink="/fun-hall" routerLinkActive="active">
-          <mat-icon>event_seat</mat-icon>
-          <span class="ml-2">Fun Hall Booking</span>
-        </a>
-        <a mat-list-item routerLink="/maintenance" routerLinkActive="active">
-          <mat-icon>payment</mat-icon>
-          <span class="ml-2">Maintenance</span>
-        </a>
-        <a mat-list-item routerLink="/events" routerLinkActive="active">
-          <mat-icon>event</mat-icon>
-          <span class="ml-2">Events Calendar</span>
-        </a>
-        <a mat-list-item routerLink="/fundraising" routerLinkActive="active">
-          <mat-icon>volunteer_activism</mat-icon>
-          <span class="ml-2">Fund Raising</span>
-        </a>
-        <a mat-list-item routerLink="/elections" routerLinkActive="active">
-          <mat-icon>how_to_vote</mat-icon>
-          <span class="ml-2">Elections</span>
-        </a>
-        <a mat-list-item routerLink="/festivals" routerLinkActive="active">
-          <mat-icon>celebration</mat-icon>
-          <span class="ml-2">Festivals</span>
-        </a>
-        <a mat-list-item routerLink="/roles" routerLinkActive="active">
-          <mat-icon>admin_panel_settings</mat-icon>
-          <span class="ml-2">Roles</span>
-        </a>
-        <a mat-list-item routerLink="/complaints" routerLinkActive="active">
-          <mat-icon>report_problem</mat-icon>
-          <span class="ml-2">Complaints</span>
-        </a>
-        <a mat-list-item routerLink="/amenities" routerLinkActive="active">
-          <mat-icon>pool</mat-icon>
-          <span class="ml-2">Amenities</span>
-        </a>
+        }
       </mat-nav-list>
 
       <div class="mt-auto">
