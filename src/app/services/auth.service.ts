@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, tap } from "rxjs";
 import { environment } from "../../environments/environment";
+import { HttpClient } from "@angular/common/http";
 
 @Injectable({
   providedIn: "root",
@@ -9,31 +10,40 @@ import { environment } from "../../environments/environment";
 export class AuthService {
   private _isAuthenticated = new BehaviorSubject<boolean>(false);
 
-  constructor(private router: Router) {}
-
-  async signIn(email: string, password: string) {
-    try {
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          email,
-          password,
-        })
-      );
-      this.router.navigate(["/dashboard"]);
-    } catch (error) {
-      console.error("Error signing in:", error);
-      throw error;
-    }
+  constructor(private router: Router, private httpClient: HttpClient) {
+    this.checkAuth();
   }
 
-  async signUp(email: string, password: string) {
-    try {
-      /// TODO:: Signup logic
-    } catch (error) {
-      console.error("Error signing up:", error);
-      throw error;
-    }
+  async signIn(username: string, password: string) {
+    this.httpClient
+      .post(`${environment.baseUrl}/v1/login`, {
+        username,
+        password,
+      })
+      .pipe(
+        tap((data: any) => {
+          if (data.token) {
+            this._isAuthenticated.next(true);
+            this.router.navigate(["/dashboard"]);
+            localStorage.setItem("token", data.token);
+          }
+        })
+      )
+      .subscribe((data) => {
+        next: (data: any) => {
+          console.log("Signed in successfully!", data);
+          // this._isAuthenticated.next(true);
+          // this.router.navigate(["/dashboard"]);
+        };
+        error: (err: any) => console.error("Error signing in:", err);
+      });
+  }
+
+  signUp(username: string, password: string) {
+    return this.httpClient.post(`${environment.baseUrl}/v1/register`, {
+      username,
+      password,
+    });
   }
 
   async signOut() {
@@ -44,6 +54,6 @@ export class AuthService {
   private async checkAuth() {}
 
   isAuthenticated() {
-    return localStorage.getItem("user") !== null;
+    return this._isAuthenticated.value || localStorage.getItem("token");
   }
 }
